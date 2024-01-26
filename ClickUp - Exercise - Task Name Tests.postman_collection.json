@@ -1,0 +1,275 @@
+{
+	"info": {
+		"_postman_id": "a2a543fd-1e7d-41e9-986f-9bdc900b3afc",
+		"name": "ClickUp - Exercise - Task Name Tests",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21300247",
+		"_collection_link": "https://solar-crescent-76211.postman.co/workspace/Team-Workspace~6bbf410a-3304-4327-87e3-5157873a825b/collection/21300247-a2a543fd-1e7d-41e9-986f-9bdc900b3afc?action=share&source=collection_link&creator=21300247"
+	},
+	"item": [
+		{
+			"name": "Create Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const json = pm.response.json();\r",
+							"\r",
+							"const spaceName = pm.collectionVariables.get('cSpaceName');\r",
+							"\r",
+							"pm.test(\"Collection name should be: \" + spaceName, function () {\r",
+							"    pm.expect(json.name).to.eql(spaceName);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set('cSpaceId', json.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{cSpaceName}}\",\r\n  \"multiple_assignees\": true,\r\n  \"features\": {\r\n    \"due_dates\": {\r\n      \"enabled\": true,\r\n      \"start_date\": false,\r\n      \"remap_due_dates\": true,\r\n      \"remap_closed_due_date\": false\r\n    },\r\n    \"time_tracking\": {\r\n      \"enabled\": false\r\n    },\r\n    \"tags\": {\r\n      \"enabled\": true\r\n    },\r\n    \"time_estimates\": {\r\n      \"enabled\": true\r\n    },\r\n    \"checklists\": {\r\n      \"enabled\": true\r\n    },\r\n    \"custom_fields\": {\r\n      \"enabled\": true\r\n    },\r\n    \"remap_dependencies\": {\r\n      \"enabled\": true\r\n    },\r\n    \"dependency_warning\": {\r\n      \"enabled\": true\r\n    },\r\n    \"portfolios\": {\r\n      \"enabled\": true\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/team/{{teamId}}/space",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"team",
+						"{{teamId}}",
+						"space"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Folderless List",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const json = pm.response.json();\r",
+							"\r",
+							"const listName = pm.collectionVariables.get('cListName');\r",
+							"\r",
+							"pm.test(\"List name should be: \" + listName, function () {\r",
+							"    pm.expect(json.name).to.eql(listName);\r",
+							"});\r",
+							"\r",
+							"pm.collectionVariables.set('cListId', json.id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"{{cListName}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/space/{{cSpaceId}}/list",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"space",
+						"{{cSpaceId}}",
+						"list"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Task",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"var taskName = pm.iterationData.get('taskName');\r",
+							"pm.collectionVariables.set('cTaskName', taskName);"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"const json = pm.response.json();\r",
+							"\r",
+							"const taskName = pm.collectionVariables.get('cTaskName');\r",
+							"\r",
+							"pm.test(\"Task name should be: \" + taskName, function () {\r",
+							"    pm.expect(json.name).to.eql(taskName);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{cTaskName}}\",\r\n    \"description\": \"New Task Description\",\r\n    \"status\": \"to do\",\r\n    \"priority\": 3,\r\n    \"time_estimate\": 8640000,\r\n    \"parent\": null,\r\n    \"archived\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/list/{{cListId}}/task",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"list",
+						"{{cListId}}",
+						"task"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Space",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Should return empty object\"), function(){\r",
+							"pm.response(json).to.be.empty;\r",
+							"};"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{url}}/space/{{cSpaceId}}",
+					"host": [
+						"{{url}}"
+					],
+					"path": [
+						"space",
+						"{{cSpaceId}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "apikey",
+		"apikey": [
+			{
+				"key": "value",
+				"value": "{{token}}",
+				"type": "string"
+			},
+			{
+				"key": "key",
+				"value": "Authorization",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cSpaceName",
+			"value": "Task Name Tests",
+			"type": "string"
+		},
+		{
+			"key": "cListName",
+			"value": "List name for taskNameTests",
+			"type": "string"
+		},
+		{
+			"key": "cTaskName",
+			"value": ""
+		},
+		{
+			"key": "cSpaceId",
+			"value": ""
+		},
+		{
+			"key": "cListId",
+			"value": ""
+		}
+	]
+}
